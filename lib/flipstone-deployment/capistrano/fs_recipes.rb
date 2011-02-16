@@ -19,16 +19,18 @@ Capistrano::Configuration.instance(:must_exist).load do
   end
 
   desc <<-DESC
-    Prepare a freshly launched machine for doing a full deployment.  If the environment runs its own
-    DB server, the appropriate database will need to be created manually as well.
+    Prepares an environment to receive deployments.  If the environment runs its own
+    DB server, the appropriate database will need to be created.
+    [For safety, please run rds:create mnually]
   DESC
-  task :prepare_new_box do
+  task :prepare_host do
     deploy.setup
     install_deploy_keys
     deploy.update
     deploy.unicorn_config
     nginx.config
     nginx.site_enable
+    nginx.reload
   end
 
   set :deployment_safeword, 'set deployment_safeword to change this value'
