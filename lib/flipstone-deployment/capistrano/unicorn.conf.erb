@@ -1,0 +1,26 @@
+##
+# Unicorn config
+##
+
+# What ports/sockets to listen on, and what options for them.
+listen <%= unicorn[:port] %>
+
+working_directory '<%= "#{current_path}" %>'
+
+# What the timeout for killing busy workers is, in seconds
+timeout <%= unicorn[:worker_timeout] %>
+
+# Whether the app should be pre-loaded
+preload_app <%= unicorn[:preload_app] %>
+
+# How many worker processes
+worker_processes <%= unicorn[:worker_processes] %>
+
+# Where to drop a pidfile
+pid '<%= "#{shared_path}/pids/unicorn.pid" %>'
+
+# Where stderr gets logged
+stderr_path '<%= "#{shared_path}/log/unicorn.err.log" %>'
+
+# Where stdout gets logged
+stdout_path '<%= "#{shared_path}/log/unicorn.log" %>'
