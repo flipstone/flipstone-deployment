@@ -32,4 +32,8 @@ Capistrano::Configuration.instance(:must_exist).load do
   # Deploy callbacks
   #
   before 'deploy:start', "deploy:unicorn_config"
+  before 'deploy:stop', 'deploy:web:disable'
+  after 'deploy:start', 'deploy:web:enable'
+  after 'deploy:migrations', 'deploy:cleanup'
+  
 end
