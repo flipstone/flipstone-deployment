@@ -17,7 +17,7 @@ server {
 
   keepalive_timeout 5;
 
-  root <%= current_dir %>/public;
+  root <%= current_path %>/public;
 
   try_files $uri $uri/index.html $uri.html @main;
 
