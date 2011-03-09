@@ -27,7 +27,7 @@ server {
   }
 
   # Support cap deploy:web:disable
-  if (-f <%= shared_path %>/maintenance.html) {
+  if (-f <%= shared_path %>/system/maintenance.html) {
     return 503;
   }
 
