@@ -19,6 +19,12 @@ server {
 
   root <%= current_path %>/public;
 
+  # Support cap deploy:web:disable
+  if (-f <%= shared_path %>/system/maintenance.html) {
+    rewrite  ^(.*)$  /system/maintenance.html last;
+    break;
+  }
+  
   try_files $uri $uri/index.html $uri.html @main;
 
   location @main {
