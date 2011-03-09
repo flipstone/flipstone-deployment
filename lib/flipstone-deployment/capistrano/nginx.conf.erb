@@ -19,12 +19,18 @@ server {
 
   root <%= current_path %>/public;
 
-  # Support cap deploy:web:disable
-  if (-f <%= shared_path %>/system/maintenance.html) {
-    rewrite  ^(.*)$  /system/maintenance.html last;
-    break;
+  error_page 503 @503;
+
+  location @503 {
+    root <%= shared_path %>/system;
+    rewrite ^(.*)$ /maintenance.html break;
   }
-  
+
+  # Support cap deploy:web:disable
+  if (-f <%= shared_path %>/maintenance.html) {
+    return 503;
+  }
+
   try_files $uri $uri/index.html $uri.html @main;
 
   location @main {
