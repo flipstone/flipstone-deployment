@@ -27,6 +27,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     deploy.setup
     install_deploy_keys
     deploy.update
+    logrotate.config
     deploy.unicorn_config
     nginx.config
     nginx.site_enable
