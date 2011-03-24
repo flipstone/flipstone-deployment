@@ -1,7 +1,7 @@
 /srv/<%=application%>/shared/log/*.log {
-  daily          # rotate daily
-  rotate 7      # keep twelve copies
-  compress       # gzip the old files
-  missingok      # don't barf if there is no log
+  daily
+  rotate 7
+  compress
+  missingok
   copytruncate
 }
