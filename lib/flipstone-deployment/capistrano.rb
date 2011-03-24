@@ -6,12 +6,10 @@ Capistrano::Configuration.instance(:must_exist).load do
   require "rvm/capistrano"                  # Load RVM's capistrano plugin.
   set :rvm_ruby_string, '1.9.2'
 
-  #
-  # Bundler support
-  #
   require "bundler/capistrano"
   require "flipstone-deployment/capistrano/rds_recipes"
   require "flipstone-deployment/capistrano/nginx_recipes"
   require "flipstone-deployment/capistrano/unicorn_recipes"
   require "flipstone-deployment/capistrano/fs_recipes"
+  require "flipstone-deployment/capistrano/log_recipes"
 end
