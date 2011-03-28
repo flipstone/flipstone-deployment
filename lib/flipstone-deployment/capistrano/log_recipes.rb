@@ -9,9 +9,10 @@ Capistrano::Configuration.instance(:must_exist).load do
       sudo "ln -s  #{logrotate_config_path} /etc/logrotate.d/#{application}"
     end
   end
+  #
+  # Deploy callbacks
+  #
+  after 'deploy:start', "logrotate:config"
+
 end
 
-#
-# Deploy callbacks
-#
-after 'deploy:start', "logrotate:config"
