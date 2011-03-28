@@ -10,3 +10,8 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
   end
 end
+
+#
+# Deploy callbacks
+#
+after 'deploy:start', "logrotate:config"
