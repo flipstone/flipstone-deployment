@@ -6,7 +6,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       buffer   = ERB.new(template).result(binding)
       logrotate_config_path = "#{shared_path}/system/logrotated.conf"
       put buffer, logrotate_config_path
-      sudo "ln -s  #{logrotate_config_path} /etc/logrotate.d/#{application}"
+      sudo "ln -sf  #{logrotate_config_path} /etc/logrotate.d/#{application}"
     end
   end
   #
