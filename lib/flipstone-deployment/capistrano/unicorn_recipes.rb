@@ -17,8 +17,8 @@ Capistrano::Configuration.instance(:must_exist).load do
     task :stop, :roles => :app do
       # returning true on stop in the event this app isn't actually running 
       # todo figure out how to test results of `status #{application}`
-      sudo "test -f /etc/init.d/#{application} && stop #{application}; true"
-      run "test -f #{shared_path}/pids/unicorn.pid && kill -TERM `cat #{shared_path}/pids/unicorn.pid`"
+      run "test -f /etc/init.d/#{application} && sudo stop #{application}; true"
+      run "test -f #{shared_path}/pids/unicorn.pid && kill -TERM `cat #{shared_path}/pids/unicorn.pid`; true"
     end
 
     task :restart, :roles => :app do
