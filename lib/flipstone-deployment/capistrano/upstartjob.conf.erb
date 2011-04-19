@@ -1,0 +1,14 @@
+# <%= application %> upstart job file
+# /etc/init/<%= application %>.conf
+# This configuration manages <%= application %>
+
+description "start <%= application %>"
+
+start on runlevel [23]
+stop on runlevel [01456]
+
+chdir <%=current_path%>
+
+exec sudo -u <%=user%> rvm 1.9.2 exec bundle exec unicorn -E <%=rails_env%> -c <%=shared_path%>/system/unicorn.conf
+respawn
+

@@ -12,4 +12,5 @@ Capistrano::Configuration.instance(:must_exist).load do
   require "flipstone-deployment/capistrano/unicorn_recipes"
   require "flipstone-deployment/capistrano/fs_recipes"
   require "flipstone-deployment/capistrano/log_recipes"
+  require "flipstone-deployment/capistrano/upstart_recipes"
 end

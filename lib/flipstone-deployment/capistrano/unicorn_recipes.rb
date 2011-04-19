@@ -11,11 +11,14 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
 
     task :start, :roles => :app do
-      run "cd #{current_path} && bundle exec unicorn --daemonize -E #{rails_env} -c #{shared_path}/system/unicorn.conf"
+      sudo "start #{application}"
     end
 
     task :stop, :roles => :app do
-      run "test -f #{shared_path}/pids/unicorn.pid && kill -QUIT `cat #{shared_path}/pids/unicorn.pid` && sleep 7; echo 'succeed'"
+      # returning true on stop in the event this app isn't actually running 
+      # todo figure out how to test results of `status #{application}`
+      sudo "test -f /etc/init.d/#{application} && stop #{application}; true"
+      run "test -f #{shared_path}/pids/unicorn.pid && kill -TERM `cat #{shared_path}/pids/unicorn.pid`"
     end
 
     task :restart, :roles => :app do
