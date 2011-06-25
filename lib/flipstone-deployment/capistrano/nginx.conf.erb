@@ -7,6 +7,13 @@ upstream <%= application %> {
   server 127.0.0.1:<%= unicorn[:port] %> fail_timeout=0;
 }
 
+<% if nginx_cfg[:redirect_names] %>
+server {
+  server_name <%= nginx_cfg[:redirect_names] %>;
+  rewrite ^(.*) http://<%= instance %>$1 permanent;
+}
+<% end %>
+
 server {
   listen <%= nginx_cfg[:port] %>;
   log_subrequest on;
