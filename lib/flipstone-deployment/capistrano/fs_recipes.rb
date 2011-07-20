@@ -37,7 +37,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   set :deployment_safeword, 'set deployment_safeword to change this value'
   task :sanity_check do
     puts " **\n **"
-    puts (" ** PRODUCTION TARGET SANITY CHECK ** ")
+    puts (" ** OMG PRODUCTION TARGET SANITY CHECK ** ")
     puts " **\n **"
 
     safeword = Capistrano::CLI.ui.ask(" ** Please confirm with safeword '#{deployment_safeword}' or [Enter] to abort:")
