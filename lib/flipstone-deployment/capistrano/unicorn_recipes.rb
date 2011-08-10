@@ -38,5 +38,5 @@ Capistrano::Configuration.instance(:must_exist).load do
   before 'deploy:migrations', 'deploy:web:disable'
   after 'deploy:migrations', 'deploy:web:enable'
   after 'deploy:migrations', 'deploy:cleanup'
-  
+  after 'deploy', 'deploy:cleanup'
 end
