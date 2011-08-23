@@ -26,6 +26,14 @@ Capistrano::Configuration.instance(:must_exist).load do
     task :generate_passfile, :roles => :app do
       run "htpasswd.py -c -b #{shared_path}/system/passfile #{nginx_cfg[:ht_user]} #{nginx_cfg[:ht_passwd]}"
     end
-
   end
+  
+  #
+  # Deploy callbacks
+  #
+  after 'deploy', 'nginx:config'
+  after 'deploy', 'nginx:reload'
+  after 'deploy:migrations', 'nginx:config'
+  after 'deploy:migrations', 'nginx:reload'
+
 end
