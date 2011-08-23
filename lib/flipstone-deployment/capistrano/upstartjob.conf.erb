@@ -9,6 +9,6 @@ stop on runlevel [01456]
 
 chdir <%=current_path%>
 
-exec sudo -u <%=user%> rvm 1.9.2 exec bundle exec unicorn -E <%=rails_env%> -c <%=shared_path%>/system/unicorn.conf
+exec sudo -u <%=user%> rvm 1.9.2 exec bundle exec <%= unicorn[:process] || 'unicorn' %> -E <%=rails_env%> -c <%=shared_path%>/system/unicorn.conf
 respawn
 
