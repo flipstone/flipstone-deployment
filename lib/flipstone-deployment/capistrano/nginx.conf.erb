@@ -20,13 +20,16 @@ server {
 
   log_subrequest on;
 
-  server_name <%= instance %> <%= server[:more_server_names] %>;
+  server_name <%= instance %> <%= server[:more_server_names] || nginx_cfg[:more_server_names] %>;
 
   <% if server[:ht_user] && server[:ht_passwd] %>
   auth_basic            "Restricted";
   auth_basic_user_file  <%= shared_path %>/system/passfile;
    <% end %>
 
+  <% if server[:redirect_to_protocol] %>
+  rewrite ^(.*) <%= server[:redirect_to_protocol]%>://$server_name$1 permanent;
+  <% else %>
   client_max_body_size 4G;
 
   keepalive_timeout 5;
@@ -58,6 +61,7 @@ server {
     proxy_intercept_errors on;
     break;
   }
+  <% end %>
 
 }
 <% end %>
