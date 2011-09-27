@@ -28,7 +28,7 @@ server {
    <% end %>
 
   <% if server[:redirect_to_protocol] %>
-  rewrite ^(.*) <%= server[:redirect_to_protocol]%>://$server_name$1 permanent;
+  rewrite ^(.*) <%= server[:redirect_to_protocol]%>://$host$1 permanent;
   <% else %>
   client_max_body_size 4G;
 
