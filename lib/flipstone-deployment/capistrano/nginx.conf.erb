@@ -14,17 +14,19 @@ server {
 }
 <% end %>
 
+<% (nginx_cfg[:servers] || [nginx_cfg]).each do |server| %>
 server {
-  listen <%= nginx_cfg[:port] %>;
+  listen <%= server[:port] %><%= server[:ssl] ? ' ssl' : '' %>;
+
   log_subrequest on;
-  
-  server_name <%= instance %> <%= nginx_cfg[:more_server_names] %>;
-  
-  <% if nginx_cfg[:ht_user] && nginx_cfg[:ht_passwd] %>
+
+  server_name <%= instance %> <%= server[:more_server_names] %>;
+
+  <% if server[:ht_user] && server[:ht_passwd] %>
   auth_basic            "Restricted";
   auth_basic_user_file  <%= shared_path %>/system/passfile;
-
    <% end %>
+
   client_max_body_size 4G;
 
   keepalive_timeout 5;
@@ -48,6 +50,9 @@ server {
   location @main {
     proxy_pass http://<%= application %>;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    <% if server[:ssl] %>
+    proxy_set_header X_FORWARDED_PROTO https;
+    <% end %>
     proxy_set_header Host $http_host;
     proxy_redirect off;
     proxy_intercept_errors on;
@@ -55,3 +60,4 @@ server {
   }
 
 }
+<% end %>
