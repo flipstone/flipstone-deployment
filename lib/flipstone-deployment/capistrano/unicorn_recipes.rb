@@ -1,4 +1,8 @@
 Capistrano::Configuration.instance(:must_exist).load do
+  set(:unicorn_pidfile) { "#{shared_path}/pids/unicorn.pid" }
+  set(:unicorn_stderr_path) { "#{shared_path}/log/unicorn.err.log" }
+  set(:unicorn_stdout_path) { "#{shared_path}/log/unicorn.log" }
+
   namespace :deploy do
     #
     # Unicorn signals per: http://unicorn.bogomips.org/SIGNALS.html

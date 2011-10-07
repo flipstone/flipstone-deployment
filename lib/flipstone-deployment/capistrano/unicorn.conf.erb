@@ -17,10 +17,10 @@ preload_app <%= unicorn[:preload_app] %>
 worker_processes <%= unicorn[:worker_processes] %>
 
 # Where to drop a pidfile
-pid '<%= "#{shared_path}/pids/unicorn.pid" %>'
+pid '<%= unicorn_pidfile %>'
 
 # Where stderr gets logged
-stderr_path '<%= "#{shared_path}/log/unicorn.err.log" %>'
+stderr_path '<%= unicorn_stderr_path %>'
 
 # Where stdout gets logged
-stdout_path '<%= "#{shared_path}/log/unicorn.log" %>'
+stdout_path '<%= unicorn_stdout_path %>'
