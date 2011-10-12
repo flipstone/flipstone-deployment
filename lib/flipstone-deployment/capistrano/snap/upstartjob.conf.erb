@@ -1,0 +1,15 @@
+# <%= application %> upstart job file
+# /etc/init/<%= application %>.conf
+# This configuration manages <%= application %>
+
+description "start <%= application %>"
+
+start on runlevel [23]
+stop on runlevel [01456]
+
+chdir <%=current_path%>
+
+exec sudo -u <%=user%> ./dist/build/<%=executable%>/<%=executable%> -p <%=snap_port%> -- -e <%=snap_env%>
+respawn
+
+
