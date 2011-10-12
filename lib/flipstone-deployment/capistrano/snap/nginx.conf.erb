@@ -13,6 +13,11 @@ server {
 
   server_name <%= instance %> <%= nginx_cfg[:more_server_names] %>;
 
+  <% if nginx_cfg[:ht_user] && nginx_cfg[:ht_passwd] %>
+  auth_basic            "Restricted";
+  auth_basic_user_file  <%= shared_path %>/system/passfile;
+   <% end %>
+
   client_max_body_size 4G;
 
   keepalive_timeout 5;
