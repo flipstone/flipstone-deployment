@@ -4,6 +4,11 @@ Capistrano::Configuration.instance(:must_exist).load do
   set(:unicorn_stdout_path) { "#{shared_path}/log/unicorn.log" }
 
   namespace :deploy do
+    desc "Create wrapper for executing the app"
+    task :unicorn_wrapper do
+      sudo "rvm wrapper 1.9.2 #{application} #{current_path}/bin/unicorn"
+    end
+
     #
     # Unicorn signals per: http://unicorn.bogomips.org/SIGNALS.html
     #
@@ -38,6 +43,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   #
   # Deploy callbacks
   #
+  before 'deploy:start', "deploy:unicorn_wrapper"
   before 'deploy:start', "deploy:unicorn_config"
   before 'deploy:migrations', 'deploy:web:disable'
   after 'deploy:migrations', 'deploy:web:enable'
