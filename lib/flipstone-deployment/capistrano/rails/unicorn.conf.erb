@@ -24,3 +24,7 @@ stderr_path '<%= unicorn_stderr_path %>'
 
 # Where stdout gets logged
 stdout_path '<%= unicorn_stdout_path %>'
+
+before_exec do |server|
+  ENV["BUNDLE_GEMFILE"] = "<%=current_path%>/Gemfile"
+end
