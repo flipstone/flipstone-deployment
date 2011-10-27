@@ -16,7 +16,7 @@ server {
   <% if nginx_cfg[:ht_user] && nginx_cfg[:ht_passwd] %>
   auth_basic            "Restricted";
   auth_basic_user_file  <%= shared_path %>/system/passfile;
-   <% end %>
+  <% end %>
 
   client_max_body_size 4G;
 
@@ -38,7 +38,11 @@ server {
 
   try_files $uri $uri/index.html $uri.html @main;
 
-  location @main {
+  <% ((nginx_cfg[:ht_off] || []) | ["@main"]).each do |location| %>
+  location <%=location %> {
+    <% if nginx_cfg[:ht_off] && nginx_cfg[:ht_off].include?(location) %>
+    auth_basic off;
+    <% end %>
     proxy_pass http://<%= application %>;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host $http_host;
@@ -46,6 +50,9 @@ server {
     proxy_intercept_errors on;
     break;
   }
+
+  <% end %>
+
 
 }
 
