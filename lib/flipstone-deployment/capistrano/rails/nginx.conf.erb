@@ -50,7 +50,11 @@ server {
 
   try_files $uri $uri/index.html $uri.html @main;
 
-  location @main {
+  <% ((nginx_cfg[:ht_off] || []) | ["@main"]).each do |location| %>
+  location <%=location %> {
+    <% if nginx_cfg[:ht_off] && nginx_cfg[:ht_off].include?(location) %>
+    auth_basic off;
+    <% end %>
     proxy_pass http://<%= application %>;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     <% if server[:ssl] %>
@@ -62,6 +66,5 @@ server {
     break;
   }
   <% end %>
-
 }
 <% end %>
