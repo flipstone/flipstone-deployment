@@ -9,7 +9,7 @@ stop on runlevel [01456]
 
 chdir <%=current_path%>
 
-exec start-stop-daemon -c <%=user%> --pidfile <%=shared_path%>/pids/unicorn.pid --start --startas /usr/local/rvm/bin/<%= application %>_unicorn -- -E <%= rails_env %> -c <%= shared_path %>/system/unicorn.conf
+exec start-stop-daemon -c <%=user%> --pidfile <%= appserver.pidfile %> --start --startas <%= appserver.path %> -- <%= appserver.args %>
 
 respawn
 

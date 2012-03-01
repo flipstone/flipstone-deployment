@@ -28,7 +28,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     install_deploy_keys
     deploy.update
     logrotate.config
-    deploy.unicorn_config
+    appserver.config
     nginx.config
     nginx.site_enable
     nginx.reload

@@ -1,29 +1,31 @@
 ##
-# Unicorn config
+# ZBatery config
 ##
 
 # What ports/sockets to listen on, and what options for them.
-listen <%= unicorn[:port] %>
+listen <%= zbatery[:port] %>
 
 working_directory '<%= "#{current_path}" %>'
 
 # What the timeout for killing busy workers is, in seconds
-timeout <%= unicorn[:worker_timeout] %>
-
-# Whether the app should be pre-loaded
-preload_app <%= unicorn[:preload_app] %>
+timeout <%= zbatery[:worker_timeout] %>
 
 # How many worker processes
-worker_processes <%= unicorn[:worker_processes] %>
+worker_processes <%= zbatery[:worker_processes] %>
 
 # Where to drop a pidfile
 pid '<%= appserver.pidfile %>'
 
 # Where stderr gets logged
-stderr_path '<%= unicorn_stderr_path %>'
+stderr_path '<%= zbatery_stderr_path %>'
 
 # Where stdout gets logged
-stdout_path '<%= unicorn_stdout_path %>'
+stdout_path '<%= zbatery_stdout_path %>'
+
+Rainbows! do
+  use :<%= zbatery[:concurrency] || "FiberSpawn" %>
+  worker_connections <%= zbatery[:worker_connections] %>
+end
 
 before_exec do |server|
   ENV["BUNDLE_GEMFILE"] = "<%=current_path%>/Gemfile"
