@@ -28,3 +28,11 @@ stdout_path '<%= unicorn_stdout_path %>'
 before_exec do |server|
   ENV["BUNDLE_GEMFILE"] = "<%=current_path%>/Gemfile"
 end
+
+after_fork do |server,worker|
+  after_fork_file = "<%=current_path%>/config/deploy/after_fork.rb"
+
+  if File.exist? after_fork_file
+    load after_fork_file
+  end
+end
