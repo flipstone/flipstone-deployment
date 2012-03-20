@@ -10,7 +10,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     run "rm -f #{deploy_key_path}"
     top.upload("config/deploy/deploy_key", deploy_key_path, :via => :scp)
     run "chmod 400 #{deploy_key_path}"
-    
+
     wrapper_path = "#{deploy_to}/git_ssh.sh"
     gitssh = "/usr/bin/env ssh -o StrictHostKeyChecking=no -i #{deploy_key_path} $1 $2\n"
     put gitssh, wrapper_path
@@ -18,17 +18,14 @@ Capistrano::Configuration.instance(:must_exist).load do
     run "export GIT_SSH=#{wrapper_path}"
   end
 
-  desc <<-DESC
-    Prepares an environment to receive deployments.  If the environment runs its own
-    DB server, the appropriate database will need to be created.
-    [For safety, please run rds:create mnually]
-  DESC
-  task :prepare_host do
-    deploy.setup
-    install_deploy_keys
-    deploy.update
-    logrotate.config
-    appserver.config
+  before 'deploy:update_code', 'install_deploy_keys'
+  before 'deploy:symlink', 'appserver:config'
+  before 'deploy:symlink', 'logrotate:config'
+
+  after :deploy do
+    if nginx_cfg[:ht_user] && nginx_cfg[:ht_passwd]
+      nginx.generate_passfile
+    end
     nginx.config
     nginx.site_enable
     nginx.reload
