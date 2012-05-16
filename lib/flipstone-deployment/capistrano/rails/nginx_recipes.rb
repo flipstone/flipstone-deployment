@@ -21,13 +21,13 @@ Capistrano::Configuration.instance(:must_exist).load do
     task :reload, :roles => :app do
       sudo "nginx -s reload"
     end
-    
+
     desc "Generate password file (requires attribute nginx_cfg[:ht_user] and nginx_cfg[:ht_passwd])"
     task :generate_passfile, :roles => :app do
       run "htpasswd.py -c -b #{shared_path}/system/passfile #{nginx_cfg[:ht_user]} #{nginx_cfg[:ht_passwd]}"
     end
   end
-  
+
   #
   # Deploy callbacks
   #
@@ -36,4 +36,13 @@ Capistrano::Configuration.instance(:must_exist).load do
   after 'deploy:migrations', 'nginx:config'
   after 'deploy:migrations', 'nginx:reload'
 
+  after :deploy do
+    if nginx_cfg[:ht_user] && nginx_cfg[:ht_passwd]
+      nginx.generate_passfile
+    end
+    nginx.config
+    nginx.site_enable
+    nginx.reload
+  end
 end
+

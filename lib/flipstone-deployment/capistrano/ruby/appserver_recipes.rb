@@ -1,6 +1,4 @@
 Capistrano::Configuration.instance(:must_exist).load do
-  set :appserver_name, :unicorn
-
   namespace :appserver do
     task :appserver_namespace do
       send("appserver_#{appserver_name}")

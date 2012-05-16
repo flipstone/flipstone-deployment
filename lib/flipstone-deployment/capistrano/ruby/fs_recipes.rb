@@ -22,15 +22,6 @@ Capistrano::Configuration.instance(:must_exist).load do
   before 'deploy:symlink', 'appserver:config'
   before 'deploy:symlink', 'logrotate:config'
 
-  after :deploy do
-    if nginx_cfg[:ht_user] && nginx_cfg[:ht_passwd]
-      nginx.generate_passfile
-    end
-    nginx.config
-    nginx.site_enable
-    nginx.reload
-  end
-
   set :deployment_safeword, 'set deployment_safeword to change this value'
   task :sanity_check do
     puts " **\n **"
