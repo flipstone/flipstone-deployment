@@ -1,0 +1,35 @@
+##
+# Rainbows config
+##
+
+# What ports/sockets to listen on, and what options for them.
+listen <%= rainbows[:port] %>
+
+working_directory '<%= "#{current_path}" %>'
+
+# Whether the app should be pre-loaded
+preload_app <%= rainbows[:preload_app] %>
+
+# What the timeout for killing busy workers is, in seconds
+timeout <%= rainbows[:worker_timeout] %>
+
+# How many worker processes
+worker_processes <%= rainbows[:worker_processes] %>
+
+# Where to drop a pidfile
+pid '<%= appserver.pidfile %>'
+
+# Where stderr gets logged
+stderr_path '<%= rainbows_stderr_path %>'
+
+# Where stdout gets logged
+stdout_path '<%= rainbows_stdout_path %>'
+
+Rainbows! do
+  use :<%= rainbows[:concurrency] || raise("You need to specify concurrency for Raindows!") %>
+  worker_connections <%= rainbows[:worker_connections] %>
+end
+
+before_exec do |server|
+  ENV["BUNDLE_GEMFILE"] = "<%=current_path%>/Gemfile"
+end
