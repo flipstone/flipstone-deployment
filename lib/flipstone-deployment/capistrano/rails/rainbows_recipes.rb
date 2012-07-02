@@ -20,7 +20,8 @@ Capistrano::Configuration.instance(:must_exist).load do
 
     desc "Pid file to be put in upstart configuration"
     task :pidfile do
-      "#{shared_path}/pids/rainbows.pid"
+      #intentionally left to facilitate switchover
+      "#{shared_path}/pids/unicorn.pid"
     end
 
     #
