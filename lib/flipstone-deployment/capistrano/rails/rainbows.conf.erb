@@ -25,9 +25,12 @@ stderr_path '<%= rainbows_stderr_path %>'
 # Where stdout gets logged
 stdout_path '<%= rainbows_stdout_path %>'
 
+
 Rainbows! do
-  use :<%= rainbows[:concurrency] || raise("You need to specify concurrency for Raindows!") %>
+  use :<%= rainbows[:concurrency] || raise("You need to specify concurrency for Rainbows!") %>
   worker_connections <%= rainbows[:worker_connections] %>
+  <% one_meg = 1024 * 1024 %>
+  client_max_body_size <%= rainbows.fetch(:client_max_body_size, one_meg) %>
 end
 
 before_exec do |server|
