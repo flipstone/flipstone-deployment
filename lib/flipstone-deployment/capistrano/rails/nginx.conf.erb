@@ -48,6 +48,12 @@ server {
     return 503;
   }
 
+  <% (nginx_cfg[:hidden_urls] || []).each do |location| %>
+  location <%= location %> {
+    rewrite ^(.*)$ /url_hidden_by_proxy;
+  }
+  <% end %>
+
   try_files $uri $uri/index.html $uri.html @main;
 
   <% ((nginx_cfg[:ht_off] || []) | ["@main"]).each do |location| %>
