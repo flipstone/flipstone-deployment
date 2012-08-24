@@ -30,7 +30,8 @@ Capistrano::Configuration.instance(:must_exist).load do
     task :npm_install do
       run "cd #{release_path} && npm install"
     end
-    after :update_code, 'deploy:npm_install'
+
+    after 'deploy:update_code', 'deploy:npm_install'
 
     task :restart do
       stop
