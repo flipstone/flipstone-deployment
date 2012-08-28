@@ -9,6 +9,6 @@ stop on runlevel [01456]
 
 chdir <%=current_path%>
 
-exec sudo -u <%=user%> npm start
+exec sudo -H -u <%=user%> sh -c "npm start"
 
 respawn
