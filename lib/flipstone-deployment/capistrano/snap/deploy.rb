@@ -16,7 +16,9 @@ Capistrano::Configuration.instance(:must_exist).load do
   end
 
   before 'deploy:update_code', 'install_deploy_keys'
-  set(:cabal_dev) { "cabal-dev --sandbox=#{shared_path}/cabal-dev" }
+  set(:ghc_path) { nil }
+  set(:cabal_config_path) { "#{shared_path}/system/cabal.config" }
+  set(:cabal_dev) { "cabal-dev --extra-config-file=#{cabal_config_path} --sandbox=#{shared_path}/cabal-dev" }
 
   # this tells capistrano what to do when you deploy
   namespace :deploy do
@@ -63,7 +65,15 @@ Capistrano::Configuration.instance(:must_exist).load do
   namespace :build do
     desc "Build the application executable"
     task :executable do
+      build.configure
       run "cd #{release_path} && #{cabal_dev} update && #{cabal_dev} install --only-dependencies && #{cabal_dev} configure && #{cabal_dev} build"
+    end
+
+    desc "Configure cabal"
+    task :configure do
+      template = File.read(File.join(File.dirname(__FILE__), "cabal.config.erb"))
+      buffer   = ERB.new(template).result(binding)
+      put buffer, cabal_config_path
     end
   end
 
@@ -120,12 +130,14 @@ Capistrano::Configuration.instance(:must_exist).load do
   end
 
   after :deploy do
-    if nginx_cfg[:ht_user] && nginx_cfg[:ht_passwd]
-      nginx.generate_passfile
+    if defined? nginx_cfg
+      if nginx_cfg[:ht_user] && nginx_cfg[:ht_passwd]
+        nginx.generate_passfile
+      end
+      nginx.config
+      nginx.site_enable
+      nginx.reload
     end
-    nginx.config
-    nginx.site_enable
-    nginx.reload
   end
 end
 
